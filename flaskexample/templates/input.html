@@ -41,7 +41,7 @@
            <span class="icon-bar"></span>
            <span class="icon-bar"></span>
          </button>
-         <a class="navbar-brand" href="#">Project name</a>
+         <a class="navbar-brand" href="#">Beat the Crowd</a>
        </div>
        <div class="collapse navbar-collapse">
          <ul class="nav navbar-nav">
@@ -65,15 +65,42 @@
     </div>
 
     <div class = "container">
-
       <form  action="/output" method="GET">
         <div class="form-group">
           <label for="station">Departing Station:</label>
-          <input type="text" id="station" name='station' placeholder="e.g. PITT">
+          <select id="station" name="station">
+            <option value="12TH">12th St. Oakland City Center</option>
+            <option value="16TH">16th St. Mission (SF)</option>
+            <option value="19TH">19th St. Oakland</option>
+            <option value="24TH">24th St. Mission</option>
+            <option value="BALB">Balboa Park (SF)</option>
+            <option value="CIVC">Civic Center / UN Plaza</option>
+            <option value="COLM">Colma</option>
+            <option value="CONC">Concord</option>
+            <option value="DALY">Daly City</option>
+            <option value="EMBR">Embarcadero (SF)</option>
+            <option value="GLEN">Glen Park (SF)</option>
+            <option value="LAFY">Lafayette</option>
+            <option value="MCAR">MacArthur (Oakland)</option>
+            <option value="MLBR">Milbrae</option>
+            <option value="MONT">Montgomery St. (SF)</option>
+            <option value="NCON">North Concord / Martinez</option>
+            <option value="ORIN">Orinda</option>
+            <option value="PITT">Pittsburg / Bay Point</option>
+            <option value="PHIL">Pleasant Hill / Contra Costa Centre</option>
+            <option value="POWL">Powell St. (SF)</option>
+            <option value="ROCK">Rockridge (Oakland)</option>
+            <option value="SBRN">San Bruno</option>
+            <option value="SFIA">San Francisco International Airport</option>
+            <option value="SSAN">South San Francisco</option>
+            <option value="WCRK">Walnut Creek</option>
+            <option value="WOAK">West Oakland</option>
+          </select>          
         </div>
         <div class="form-group">
           <label for="direction">Direction:</label>
-          <input type="text" id="direction" name='direction' placeholder="e.g. nortbound">
+          <input type="radio" id="direction" name="direction" value="northbound"> Northbound
+          <input type="radio" id="direction" name="direction" value="southbound"> Southbound<br>
         </div>
         <div class="form-group">
           <label for="hour">Hour:</label>
