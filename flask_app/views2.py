@@ -13,16 +13,17 @@ import pickle
 from wunderground_api import key_id
 import datetime
 from flask_app.predict_z import z_calc
+from sklearn.externals import joblib
 
 # connect to Postgres
-user = 'bkhurley' #add your Postgres username here      
-host = 'localhost'
+user = 'postgres' #add your Postgres username here      
+host = '/var/run/postgresql/'
 dbname = 'bart_db'
 db = create_engine('postgres://%s%s/%s'%(user,host,dbname))
 con = None
-con = psycopg2.connect(database=dbname, user=user)
+con = psycopg2.connect(database=dbname, host=host, user=user, password="simon6toes")
 
-@app.route('/input')
+@app.route('/')
 # def cesareans_input():
 def input():
     return render_template("input.html")
@@ -33,16 +34,24 @@ def output():
     # pull 'data' from input fields and store it
     rain = request.args.get('rain')
     hour = request.args.get('hour')
-    selected_day = np.int(request.args.get('selected_day'))
+    date_in = request.args.get('date')
+    date = pd.to_datetime(date_in).date()
+    #b4_hour = hour - 1
+    #after_hour = hour + 1
+    #selected_day = np.int(request.args.get('selected_day'))
     station = request.args.get('station')
     direction = request.args.get('direction')
     temp = request.args.get('temperature')
   
-    # get date from day selection
-    if selected_day == 0:
-        date = datetime.date.today()
-    else:
-        date = (datetime.date.today() + datetime.timedelta(days=1))
+    # get day index from date
+    if date == datetime.date.today():
+        selected_day = 0        
+    elif date == (datetime.date.today() + datetime.timedelta(days=1)):
+        selected_day = 1
+    elif date == (datetime.date.today() + datetime.timedelta(days=2)):
+        selected_day = 2
+    elif date == (datetime.date.today() + datetime.timedelta(days=3)):
+        selected_day = 3
   
     # get name of day
     day = date.strftime("%A")
@@ -111,8 +120,8 @@ def output():
     except:
         pass
 
-    pkl_file = open('rf_reg_updated.pkl', 'rb')
-    model = pickle.load(pkl_file)
+    model = joblib.load('rf_reg_updated.pkl')
+    #model = pickle.load(pkl_file)
     prediction = model.predict(new_vector.reshape(1, -1))
     
     # get z-score of predcition normalized to station
@@ -123,12 +132,12 @@ def output():
         suggest = 'You should have plenty of room!'
     elif (pred_z > 1) & (pred_z <=3):
         pred_str = 'MODERATE'
-        pred_color = 'yellow'
+        pred_color = 'orange'
         suggest = 'The train should be moderately busy. There may or may not be seating.'
     elif pred_z > 3:
         pred_str = 'HIGH'
-        pred_color = 'high'
+        pred_color = 'red'
         suggest = 'The train and platform will likely be very crowded! Consider checking crowd levels for either an earlier or later time, or check the crowd levels at a station up the line.'
     
-    return render_template('output.html', prediction=pred_str, suggestion=suggest)
+    return render_template('output.html', prediction=pred_str, suggestion=suggest, col=pred_color)
   

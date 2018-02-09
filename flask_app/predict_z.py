@@ -10,7 +10,7 @@ import pandas as pd
 def z_calc(raw_predict, station):
     
     # load station stats
-    csv_str = '/Users/bkhurley/git/insight/project/beat_the_crowd/data/stn_mean_std.csv'
+    csv_str = '/home/ubuntu/virtualenvs/insight/data/stn_mean_std.csv'
     station_stats = pd.read_csv(csv_str)
     this_stn = station_stats.loc[station_stats['station'] == station, :]
     
